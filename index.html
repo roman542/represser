@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	
+	<script type="text/javascript" src="tools.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script type="text/javascript">
+      'use strict';
+let keyboards = { 
+	inportFromJSON:function(json) {
+		let keys = JSON.parse(json)
+		for (let i= 0; i < keys.length; ++i) {	
+			if (keys[i].name == this.keys[i].name ) continue;
+			this.keys.push( keys[i] );
+		}		
+	},
+	exportToJSON:function() {
+		return JSON.stringify(this.keys);
+	},
+	removeByName:function(name) {
+		let toRemove = this.keys.findIndex(item => item.name == name);
+		if ( toRemove == -1) return false;
+/*		for (let i = toRemove + 1; i < this.keys.length; ++i) {
+			this.keys[(i - 1)] = this.keys[i];
+		}
+		this.keys.length -= 1; */
+		this.keys.splice(toRemove, 1);
+		return true;
+	},
+	findByName:function(name) {
+		return this.keys.find(item => item.name == name);
+	},
+	keys:[ { 
+			name:"en", 
+			buttons:"`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./ ~!#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
+		},
+		{
+			name:"uk", 
+			buttons:"'1234567890-=йцукенгшщзхї\\фівапролджєячсмитьбю. ~!№;%:?*()_+ЙЦУКЕНГШЩЗХЇ/ФІВАПРОЛДЖЄЯЧСМИТЬБЮ,"
+		} ]
+}
+      let keyb_en = "`1234567890-=qwertyuiop[]\\asdfghjkl;'zxcvbnm,./ ~!#$%^&*()_+QWERTYUIOP{}|ASDFGHJKL:\"ZXCVBNM<>?"
+      let keyb_uk = "'1234567890-=йцукенгшщзхї\\фівапролджєячсмитьбю. ~!№;%:?*()_+ЙЦУКЕНГШЩЗХЇ/ФІВАПРОЛДЖЄЯЧСМИТЬБЮ,"
+      let keyb_uk2 = "'1234567890-=йцукенгшщзхїґфівапролджєячсмитьбю. ~!№;%:?*()_+ЙЦУКЕНГШЩЗХЇҐФІВАПРОЛДЖЄЯЧСМИТЬБЮ,"
+
+	function repress(){
+		otxt.value = "";
+		for (let ch of itxt.value) {
+			let i = 0;
+			if ( (i = keyboards.findByName(rprFrom.value).buttons.indexOf(ch)) == -1 ) {
+				otxt.value += ch;
+				continue;
+			}
+			otxt.value += keyboards.findByName(rprTo.value).buttons[i];
+		}
+	}
+    </script>
+  </head>
+  <body>
+    <h1>Represser</h1>
+    <p> 
+      <textarea class="itxt"></textarea> 
+      <input type="button" value="Repress" onclick="repress()"><br>
+	<select name="rprFrom">
+		<option value="en">en</option>
+		<option value="uk">uk</option>
+	</select> &#62;
+	<select name="rprTo">
+		<option value="en">en</option>
+		<option value="uk">uk</option>
+	</select><br>
+      <textarea class="otxt" readonly></textarea>
+    </p>
+    <p>version v3.0.0<p>
+
+    <script type="text/javascript">
+      let mode, i;
+	let rprFrom = document.querySelector( 'select[name=rprFrom]' );
+	let rprTo = document.querySelector( 'select[name=rprTo' );
+      let itxt = document.querySelector( 'textarea.itxt' );
+      let otxt = document.querySelector( 'textarea.otxt' );
+    </script>
+  </body>
+</html>
